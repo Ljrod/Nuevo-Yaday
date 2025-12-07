@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Heart, Award, Sparkles } from "lucide-react";
+import Image from "next/image";
 
 export default function AboutSection() {
     const features = [
@@ -38,19 +39,15 @@ export default function AboutSection() {
                         transition={{ duration: 0.6 }}
                     >
                         <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
-                            {/* Placeholder for designer image */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                                <div className="text-center p-8">
-                                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-white flex items-center justify-center shadow-lg">
-                                        <span className="text-primary text-4xl font-playfair">
-                                            YD
-                                        </span>
-                                    </div>
-                                    <p className="text-sm text-gray-600">
-                                        Imagen: /images/about/designer.jpg
-                                    </p>
-                                </div>
-                            </div>
+                            {/* Owner Photo */}
+                            <Image
+                                src="/images/about/owner.jpg"
+                                alt="Dueña de YaDay Nail Designer"
+                                fill
+                                className="object-cover object-center"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                                priority
+                            />
                         </div>
 
                         {/* Decorative Element */}

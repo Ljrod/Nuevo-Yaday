@@ -74,27 +74,44 @@ export default function ServicesSection() {
                 <style jsx global>{`
           .swiper-button-next,
           .swiper-button-prev {
-            color: #7f0030 !important;
-            background: white;
+            color: #991142 !important;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+          }
+
+          .swiper-button-next:hover,
+          .swiper-button-prev:hover {
+            opacity: 1;
+            transform: scale(1.2);
           }
 
           .swiper-button-next:after,
           .swiper-button-prev:after {
-            font-size: 20px !important;
+            font-size: 24px !important;
+            font-weight: 800;
           }
 
           .swiper-pagination-bullet {
-            background: #7f0030 !important;
-            opacity: 0.3;
+            background: #991142 !important;
+            opacity: 0.25;
+            width: 8px;
+            height: 8px;
+            transition: all 0.3s ease;
           }
 
           .swiper-pagination-bullet-active {
             opacity: 1;
-            background: #ff93c7 !important;
+            background: #991142 !important;
+            width: 28px;
+            border-radius: 4px;
           }
         `}</style>
             </div>
