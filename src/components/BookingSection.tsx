@@ -33,7 +33,7 @@ export default function BookingSection() {
 
                 {/* Additional Info */}
                 <motion.div
-                    className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+                    className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
@@ -51,18 +51,9 @@ export default function BookingSection() {
                     <div className="text-center p-6 bg-white rounded-lg shadow-sm">
                         <h3 className="font-semibold text-primary mb-2">Ubicación</h3>
                         <p className="text-sm text-gray-600">
-                            Av. Principal #123
+                            Almodóvar del Río
                             <br />
-                            Ciudad
-                        </p>
-                    </div>
-
-                    <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-                        <h3 className="font-semibold text-primary mb-2">Contacto</h3>
-                        <p className="text-sm text-gray-600">
-                            +1 234 567 8900
-                            <br />
-                            info@yaday.com
+                            Córdoba, España 🇪🇸
                         </p>
                     </div>
                 </motion.div>

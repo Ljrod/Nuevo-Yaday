@@ -1,28 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Instagram, Facebook } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
-
-    const contactInfo = [
-        {
-            icon: MapPin,
-            text: "Av. Principal #123, Ciudad",
-            link: "https://maps.google.com",
-        },
-        {
-            icon: Phone,
-            text: "+1 234 567 8900",
-            link: "tel:+12345678900",
-        },
-        {
-            icon: Mail,
-            text: "info@yaday.com",
-            link: "mailto:info@yaday.com",
-        },
-    ];
 
     const socialLinks = [
         {
@@ -40,7 +22,7 @@ export default function Footer() {
     return (
         <footer className="bg-primary text-white py-12">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     {/* Brand Section */}
                     <div>
                         <h3 className="font-playfair text-2xl font-bold mb-4">
@@ -50,26 +32,6 @@ export default function Footer() {
                             Transformando tus uñas en obras de arte. Belleza, elegancia y
                             profesionalismo en cada detalle.
                         </p>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div>
-                        <h4 className="font-semibold text-lg mb-4">Contacto</h4>
-                        <ul className="space-y-3">
-                            {contactInfo.map((item, index) => (
-                                <li key={index}>
-                                    <a
-                                        href={item.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-2 text-white/80 hover:text-accent transition-colors"
-                                    >
-                                        <item.icon className="w-4 h-4" />
-                                        <span className="text-sm">{item.text}</span>
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
                     </div>
 
                     {/* Social Media */}

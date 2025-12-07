@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://yaday.com/sitemap.xml
+
+# Disallow admin areas (if any in the future)
+Disallow: /api/
+Disallow: /_next/
+
+# Crawl-delay
+Crawl-delay: 0
