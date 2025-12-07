@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import AboutSection from "@/components/AboutSection";
 import BookingSection from "@/components/BookingSection";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export default function Home() {
     return (
@@ -19,6 +20,9 @@ export default function Home() {
             <BookingSection />
 
             <Footer />
+
+            {/* Floating WhatsApp Button */}
+            <FloatingWhatsApp />
         </main>
     );
 }

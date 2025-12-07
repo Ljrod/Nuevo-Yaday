@@ -91,19 +91,6 @@ export default function Footer() {
                                 </motion.a>
                             ))}
                         </div>
-
-                        {/* WhatsApp */}
-                        <div className="mt-6">
-                            <a
-                                href="https://wa.me/12345678900"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors text-sm font-medium"
-                            >
-                                <Phone className="w-4 h-4" />
-                                WhatsApp
-                            </a>
-                        </div>
                     </div>
                 </div>
 
