@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, User, Phone } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, User, Phone, Mail } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -31,12 +31,15 @@ export default function BookingForm() {
         date: undefined as Date | undefined,
         time: "",
         name: "",
+        email: "",
         phone: "",
+        mensaje: "",
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Simple validation
@@ -46,38 +49,76 @@ export default function BookingForm() {
         if (!formData.date) newErrors.date = "Por favor selecciona una fecha";
         if (!formData.time) newErrors.time = "Por favor selecciona una hora";
         if (!formData.name.trim()) newErrors.name = "Por favor ingresa tu nombre";
+        if (!formData.email.trim()) {
+            newErrors.email = "Por favor ingresa tu email";
+        } else {
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                newErrors.email = "Por favor ingresa un email válido";
+            }
+        }
         if (!formData.phone.trim()) newErrors.phone = "Por favor ingresa tu teléfono";
 
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            // Log to console as specified
-            console.log("=== DATOS DE LA CITA ===");
-            console.log("Servicio:", formData.service);
-            console.log(
-                "Fecha:",
-                formData.date ? format(formData.date, "PPP", { locale: es }) : ""
-            );
-            console.log("Hora:", formData.time);
-            console.log("Nombre:", formData.name);
-            console.log("Teléfono:", formData.phone);
-            console.log("========================");
+            setIsSubmitting(true);
 
-            // Show success message
-            alert(
-                `¡Cita agendada con éxito!\n\nServicio: ${formData.service}\nFecha: ${formData.date ? format(formData.date, "PPP", { locale: es }) : ""
-                }\nHora: ${formData.time}\n\nTe contactaremos pronto al ${formData.phone
-                }`
-            );
+            try {
+                // Preparar datos para enviar
+                const bookingData = {
+                    nombre: formData.name,
+                    email: formData.email,
+                    telefono: formData.phone,
+                    servicio: formData.service,
+                    fecha: formData.date ? format(formData.date, "yyyy-MM-dd") : "",
+                    hora: formData.time,
+                    mensaje: formData.mensaje || "",
+                };
 
-            // Reset form
-            setFormData({
-                service: "",
-                date: undefined,
-                time: "",
-                name: "",
-                phone: "",
-            });
+                // Enviar a la API
+                const response = await fetch("/api/bookings", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(bookingData),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Éxito
+                    alert(
+                        `¡Cita agendada con éxito! ✨\n\nServicio: ${formData.service}\nFecha: ${formData.date ? format(formData.date, "PPP", { locale: es }) : ""
+                        }\nHora: ${formData.time}\n\nTe contactaremos pronto al ${formData.email}`
+                    );
+
+                    // Reset form
+                    setFormData({
+                        service: "",
+                        date: undefined,
+                        time: "",
+                        name: "",
+                        email: "",
+                        phone: "",
+                        mensaje: "",
+                    });
+                } else {
+                    // Error del servidor
+                    alert(
+                        `Error al agendar la cita: ${data.error || "Por favor intenta de nuevo"}`
+                    );
+                }
+            } catch (error) {
+                console.error("Error al enviar formulario:", error);
+                alert(
+                    "Error de conexión. Por favor verifica tu internet e intenta de nuevo."
+                );
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -225,6 +266,27 @@ export default function BookingForm() {
                             )}
                         </div>
 
+                        {/* Email */}
+                        <div className="space-y-2">
+                            <Label htmlFor="email" className="flex items-center gap-2">
+                                <Mail className="w-4 h-4" />
+                                Email
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="tu@email.com"
+                                value={formData.email}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, email: e.target.value })
+                                }
+                                className={cn(errors.email && "border-red-500")}
+                            />
+                            {errors.email && (
+                                <p className="text-sm text-red-500">{errors.email}</p>
+                            )}
+                        </div>
+
                         {/* Phone */}
                         <div className="space-y-2">
                             <Label htmlFor="phone" className="flex items-center gap-2">
@@ -234,7 +296,7 @@ export default function BookingForm() {
                             <Input
                                 id="phone"
                                 type="tel"
-                                placeholder="+1 234 567 8900"
+                                placeholder="+34 722 22 43 79"
                                 value={formData.phone}
                                 onChange={(e) =>
                                     setFormData({ ...formData, phone: e.target.value })
@@ -254,8 +316,9 @@ export default function BookingForm() {
                     variant="accent"
                     size="lg"
                     className="w-full text-lg font-semibold mt-6"
+                    disabled={isSubmitting}
                 >
-                    Confirmar Cita
+                    {isSubmitting ? "Enviando..." : "Confirmar Cita"}
                 </Button>
 
                 <p className="text-sm text-gray-500 text-center">
