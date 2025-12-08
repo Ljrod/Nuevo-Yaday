@@ -1,5 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
+import { sendBookingNotification } from '@/lib/twilio';
 
 export async function POST(request: Request) {
     try {
@@ -30,11 +31,27 @@ export async function POST(request: Request) {
             RETURNING *
         `;
 
+        const booking = result.rows[0];
+
+        // Enviar notificación de WhatsApp (sin bloquear la respuesta)
+        // Si falla el WhatsApp, la reserva ya está guardada
+        sendBookingNotification({
+            nombre,
+            email,
+            telefono: telefono || 'No proporcionado',
+            servicio,
+            fecha,
+            hora,
+            mensaje,
+        }).catch((error) => {
+            console.error('Error sending WhatsApp notification:', error);
+        });
+
         return NextResponse.json(
             {
                 success: true,
                 message: '¡Reserva creada exitosamente!',
-                booking: result.rows[0],
+                booking,
             },
             { status: 201 }
         );
