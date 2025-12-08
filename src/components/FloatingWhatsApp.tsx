@@ -13,29 +13,44 @@ export default function FloatingWhatsApp() {
     const whatsappMessage = encodeURIComponent("¡Hola! Me gustaría agendar una cita ✨");
 
     useEffect(() => {
-        // Show popup after 10 seconds
-        const popupTimer = setTimeout(() => {
-            if (!popupDismissed) {
+        // Verificar si el usuario ya cerró el pop-up anteriormente
+        const dismissed = localStorage.getItem("yaday-whatsapp-popup-dismissed");
+        if (dismissed === "true") {
+            setPopupDismissed(true);
+            return;
+        }
+
+        // Solo mostrar pop-up si no ha sido cerrado
+        if (!popupDismissed) {
+            // Mostrar pop-up después de 10 segundos
+            const popupTimer = setTimeout(() => {
                 setShowPopup(true);
-            }
-        }, 10000);
+            }, 10000);
 
-        // Auto-hide popup after 8 seconds if not dismissed
-        const hideTimer = setTimeout(() => {
-            if (showPopup && !popupDismissed) {
+            return () => {
+                clearTimeout(popupTimer);
+            };
+        }
+    }, []); // Solo ejecutar una vez al montar el componente
+
+    useEffect(() => {
+        // Auto-ocultar popup después de 8 segundos si está visible
+        if (showPopup && !popupDismissed) {
+            const hideTimer = setTimeout(() => {
                 setShowPopup(false);
-            }
-        }, 18000);
+            }, 8000);
 
-        return () => {
-            clearTimeout(popupTimer);
-            clearTimeout(hideTimer);
-        };
-    }, [popupDismissed, showPopup]);
+            return () => {
+                clearTimeout(hideTimer);
+            };
+        }
+    }, [showPopup, popupDismissed]);
 
     const handleDismissPopup = () => {
         setShowPopup(false);
         setPopupDismissed(true);
+        // Guardar en localStorage para que no se vuelva a mostrar
+        localStorage.setItem("yaday-whatsapp-popup-dismissed", "true");
     };
 
     const handleWhatsAppClick = () => {
