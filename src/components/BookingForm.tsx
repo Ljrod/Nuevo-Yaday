@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar as CalendarIcon, Clock, User, Phone, Mail } from "lucide-react";
 import { format } from "date-fns";
@@ -38,6 +38,39 @@ export default function BookingForm() {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [horasOcupadas, setHorasOcupadas] = useState<string[]>([]);
+    const [checkingAvailability, setCheckingAvailability] = useState(false);
+
+    // Consultar disponibilidad cuando cambia la fecha
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            if (!formData.date) {
+                setHorasOcupadas([]);
+                return;
+            }
+
+            setCheckingAvailability(true);
+            try {
+                const fecha = format(formData.date, "yyyy-MM-dd");
+                const response = await fetch(`/api/availability?fecha=${fecha}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setHorasOcupadas(data.horasOcupadas || []);
+                } else {
+                    console.error("Error fetching availability:", data.error);
+                    setHorasOcupadas([]);
+                }
+            } catch (error) {
+                console.error("Error fetching availability:", error);
+                setHorasOcupadas([]);
+            } finally {
+                setCheckingAvailability(false);
+            }
+        };
+
+        fetchAvailability();
+    }, [formData.date]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -208,12 +241,18 @@ export default function BookingForm() {
                     <div className="space-y-2">
                         <Label htmlFor="time" className="flex items-center gap-2 text-base">
                             <span className="text-primary">3.</span> Hora
+                            {checkingAvailability && (
+                                <span className="text-xs text-gray-500">
+                                    (Consultando disponibilidad...)
+                                </span>
+                            )}
                         </Label>
                         <Select
                             value={formData.time}
                             onValueChange={(value) =>
                                 setFormData({ ...formData, time: value })
                             }
+                            disabled={!formData.date || checkingAvailability}
                         >
                             <SelectTrigger
                                 id="time"
@@ -222,18 +261,35 @@ export default function BookingForm() {
                                 <SelectValue placeholder="Elige una hora..." />
                             </SelectTrigger>
                             <SelectContent>
-                                {availableTimes.map((time) => (
-                                    <SelectItem key={time} value={time}>
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {time}
-                                        </div>
-                                    </SelectItem>
-                                ))}
+                                {availableTimes.map((time) => {
+                                    const isOcupada = horasOcupadas.includes(time);
+                                    return (
+                                        <SelectItem
+                                            key={time}
+                                            value={time}
+                                            disabled={isOcupada}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="w-4 h-4" />
+                                                {time}
+                                                {isOcupada && (
+                                                    <span className="text-xs text-red-500 ml-auto">
+                                                        (Ocupada)
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </SelectItem>
+                                    );
+                                })}
                             </SelectContent>
                         </Select>
                         {errors.time && (
                             <p className="text-sm text-red-500">{errors.time}</p>
+                        )}
+                        {!formData.date && (
+                            <p className="text-xs text-gray-500">
+                                Selecciona una fecha primero
+                            </p>
                         )}
                     </div>
                 </div>
