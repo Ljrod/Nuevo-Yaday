@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, User, Phone, Mail } from "lucide-react";
+import { Calendar as CalendarIcon, User, Phone, Mail } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -17,6 +17,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { CustomCalendar } from "@/components/ui/custom-calendar";
+import { TimePicker } from "@/components/ui/time-picker";
 import {
     Popover,
     PopoverContent,
@@ -236,58 +237,29 @@ export default function BookingForm() {
                     </div>
 
                     {/* Time Selection */}
-                    <div className="space-y-2">
-                        <Label htmlFor="time" className="flex items-center gap-2 text-base">
+                    <div className="space-y-2 md:col-span-2">
+                        <Label className="flex items-center gap-2 text-base">
                             <span className="text-primary">3.</span> Hora
                             {checkingAvailability && (
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-gray-500 ml-2">
                                     (Consultando disponibilidad...)
                                 </span>
                             )}
                         </Label>
-                        <Select
-                            value={formData.time}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, time: value })
-                            }
-                            disabled={!formData.date || checkingAvailability}
-                        >
-                            <SelectTrigger
-                                id="time"
-                                className={cn(errors.time && "border-red-500")}
-                            >
-                                <SelectValue placeholder="Elige una hora..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {availableTimes.map((time) => {
-                                    const isOcupada = horasOcupadas.includes(time);
-                                    return (
-                                        <SelectItem
-                                            key={time}
-                                            value={time}
-                                            disabled={isOcupada}
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <Clock className="w-4 h-4" />
-                                                {time}
-                                                {isOcupada && (
-                                                    <span className="text-xs text-red-500 ml-auto">
-                                                        (Ocupada)
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectContent>
-                        </Select>
+                        <div className={cn(
+                            "p-4 rounded-lg border",
+                            errors.time ? "border-red-500 bg-red-50/50" : "border-gray-200 bg-gray-50/50"
+                        )}>
+                            <TimePicker
+                                times={availableTimes}
+                                selected={formData.time}
+                                onSelect={(time) => setFormData({ ...formData, time })}
+                                disabledTimes={horasOcupadas}
+                                disabled={!formData.date || checkingAvailability}
+                            />
+                        </div>
                         {errors.time && (
                             <p className="text-sm text-red-500">{errors.time}</p>
-                        )}
-                        {!formData.date && (
-                            <p className="text-xs text-gray-500">
-                                Selecciona una fecha primero
-                            </p>
                         )}
                     </div>
                 </div>
