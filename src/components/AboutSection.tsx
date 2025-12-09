@@ -14,9 +14,9 @@ export default function AboutSection() {
         },
         {
             icon: Award,
-            title: "Profesionalismo",
+            title: "Atención Personalizada",
             description:
-                "Años de experiencia y formación continua en las últimas tendencias.",
+                "Nos dedicamos al cuidado de tus uñas con atención única para cada cliente.",
         },
         {
             icon: Sparkles,
@@ -66,22 +66,22 @@ export default function AboutSection() {
                         </h2>
 
                         <div className="space-y-4 text-gray-700 mb-8">
-                            <p className="text-lg leading-relaxed">
+                            <p className="text-base leading-relaxed">
                                 En <span className="font-semibold text-primary">YaDay Nail Designer</span>,
-                                creemos que las uñas son mucho más que un accesorio: son una forma de
-                                expresión personal y arte.
+                                nos dedicamos al cuidado de tus uñas con atención personalizada,
+                                para que luzcas siempre manos hermosas y perfectamente cuidadas.
                             </p>
 
-                            <p className="leading-relaxed">
-                                Nuestra filosofía se centra en ofrecer una experiencia de lujo
-                                personalizada, donde cada cliente recibe atención exclusiva y diseños
-                                únicos que reflejan su estilo y personalidad.
+                            <p className="text-base leading-relaxed">
+                                Cada servicio es una experiencia única diseñada especialmente para ti.
+                                Trabajamos con productos de alta calidad y técnicas profesionales
+                                para garantizar resultados excepcionales que reflejen tu estilo y personalidad.
                             </p>
 
-                            <p className="leading-relaxed">
-                                Con años de experiencia en la industria de la belleza y una pasión
-                                inquebrantable por la perfección, nos dedicamos a transformar tus
-                                manos en verdaderas obras de arte.
+                            <p className="text-base leading-relaxed">
+                                Con pasión y dedicación por la belleza de tus uñas, nos enfocamos
+                                en brindarte un servicio de calidad que transforme tus manos en
+                                verdaderas obras de arte.
                             </p>
                         </div>
 

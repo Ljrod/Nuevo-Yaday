@@ -27,10 +27,8 @@ export default function Header() {
     };
 
     const navLinks = [
-        { id: "hero", label: "Inicio" },
         { id: "servicios", label: "Servicios" },
         { id: "nosotros", label: "Nosotros" },
-        { id: "citas", label: "Agendar" },
     ];
 
     return (

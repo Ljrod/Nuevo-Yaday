@@ -16,7 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+import { CustomCalendar } from "@/components/ui/custom-calendar";
 import {
     Popover,
     PopoverContent,
@@ -221,14 +221,12 @@ export default function BookingForm() {
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
-                                <Calendar
-                                    mode="single"
+                                <CustomCalendar
                                     selected={formData.date}
                                     onSelect={(date) => setFormData({ ...formData, date })}
-                                    disabled={(date) =>
-                                        date < new Date() || date < new Date("1900-01-01")
+                                    disabled={(date: Date) =>
+                                        date < new Date(new Date().setHours(0, 0, 0, 0))
                                     }
-                                    initialFocus
                                 />
                             </PopoverContent>
                         </Popover>
