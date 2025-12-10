@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Service } from "@/lib/services";
-import { Clock, DollarSign, Sparkles } from "lucide-react";
+import { Clock, DollarSign } from "lucide-react";
 
 interface ServiceCardProps {
     service: Service;
@@ -39,20 +39,16 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                         whileHover={{ y: -8 }}
                         transition={{ duration: 0.3 }}
                     >
-                        {/* Gradient Background Area */}
-                        <div className="relative w-full h-[55%] bg-gradient-to-br from-primary/10 via-accent/20 to-primary/5 overflow-hidden">
-                            {/* Decorative Circles */}
-                            <div className="absolute top-10 right-10 w-32 h-32 bg-accent/20 rounded-full blur-2xl" />
-                            <div className="absolute bottom-5 left-10 w-40 h-40 bg-primary/15 rounded-full blur-3xl" />
-
-                            {/* Icon/Initial */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="relative">
-                                    <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transform rotate-6 group-hover:rotate-12 transition-transform duration-300">
-                                        <Sparkles className="w-12 h-12 text-white" strokeWidth={1.5} />
-                                    </div>
-                                </div>
-                            </div>
+                        {/* Image Area */}
+                        <div className="relative w-full h-[55%] overflow-hidden">
+                            {/* Main Service Image */}
+                            <img
+                                src={service.mainImageUrl}
+                                alt={service.name}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                         </div>
 
                         {/* Content Area */}
@@ -122,29 +118,21 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
                         {/* Gallery Grid */}
                         <div className="grid grid-cols-2 gap-3 flex-grow mb-4">
-                            {service.sampleImageUrls.slice(0, 4).map((url, index) => (
+                            {[service.mainImageUrl, ...service.sampleImageUrls.slice(0, 3)].map((url, index) => (
                                 <motion.div
                                     key={index}
-                                    className="relative bg-gradient-to-br from-primary/10 via-accent/15 to-primary/5 rounded-xl overflow-hidden group/img"
+                                    className="relative aspect-square rounded-xl overflow-hidden group/img"
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ duration: 0.2 }}
                                 >
-                                    {/* Placeholder for sample images */}
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="text-center p-3">
-                                            <div className="w-14 h-14 mx-auto mb-2 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 flex items-center justify-center shadow-md">
-                                                <span className="text-white text-lg font-bold">
-                                                    {index + 1}
-                                                </span>
-                                            </div>
-                                            <p className="text-[10px] text-gray-500 line-clamp-1 px-2">
-                                                Ejemplo {index + 1}
-                                            </p>
-                                        </div>
-                                    </div>
-
+                                    {/* Sample Image */}
+                                    <img
+                                        src={url}
+                                        alt={`${service.name} ejemplo ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
                                     {/* Hover Overlay */}
-                                    <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-200" />
+                                    <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-200" />
                                 </motion.div>
                             ))}
                         </div>
