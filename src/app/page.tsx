@@ -4,7 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import AboutSection from "@/components/AboutSection";
 import BookingSection from "@/components/BookingSection";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import ChatBot from "@/components/ChatBot";
 
 export default function Home() {
     return (
@@ -21,8 +21,8 @@ export default function Home() {
 
             <Footer />
 
-            {/* Floating WhatsApp Button */}
-            <FloatingWhatsApp />
+            {/* Interactive Booking ChatBot */}
+            <ChatBot />
         </main>
     );
 }
