@@ -46,6 +46,7 @@ export default function ServicesSection() {
                         slidesPerView={1}
                         navigation
                         pagination={{ clickable: true }}
+                        loop={true}
                         autoplay={{
                             delay: 5000,
                             disableOnInteraction: false,
@@ -62,11 +63,13 @@ export default function ServicesSection() {
                         }}
                         className="pb-12"
                     >
-                        {services.map((service) => (
-                            <SwiperSlide key={service.id}>
-                                <ServiceCard service={service} />
-                            </SwiperSlide>
-                        ))}
+                        {services
+                            .filter(service => service.id !== 'retiro-material')
+                            .map((service) => (
+                                <SwiperSlide key={service.id}>
+                                    <ServiceCard service={service} />
+                                </SwiperSlide>
+                            ))}
                     </Swiper>
                 </motion.div>
 
@@ -97,6 +100,10 @@ export default function ServicesSection() {
           .swiper-button-prev:after {
             font-size: 24px !important;
             font-weight: 800;
+          }
+
+          .swiper-pagination {
+            bottom: -40px !important;
           }
 
           .swiper-pagination-bullet {

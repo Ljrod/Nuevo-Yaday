@@ -40,19 +40,20 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                         transition={{ duration: 0.3 }}
                     >
                         {/* Image Area */}
-                        <div className="relative w-full h-[55%] overflow-hidden">
+                        <div className="relative w-full h-[70%] overflow-hidden">
                             {/* Main Service Image */}
                             <img
                                 src={service.mainImageUrl}
                                 alt={service.name}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${service.id === 'pedicura' ? 'object-[center_35%]' : 'object-center'
+                                    }`}
                             />
                             {/* Gradient Overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                         </div>
 
                         {/* Content Area */}
-                        <div className="relative h-[45%] bg-white p-6 flex flex-col">
+                        <div className="relative h-[30%] bg-white p-6 flex flex-col">
                             {/* Title */}
                             <h3 className="font-playfair text-2xl font-bold text-primary mb-3 leading-tight">
                                 {service.name}
@@ -63,25 +64,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                                 {service.description}
                             </p>
 
-                            {/* Info Badges */}
-                            <div className="flex flex-wrap gap-2 mb-3">
-                                {service.price && (
-                                    <div className="flex items-center gap-1.5 bg-primary/5 px-3 py-1.5 rounded-full">
-                                        <DollarSign className="w-4 h-4 text-primary" />
-                                        <span className="text-xs font-medium text-primary">
-                                            {service.price}
-                                        </span>
-                                    </div>
-                                )}
-                                {service.duration && (
-                                    <div className="flex items-center gap-1.5 bg-accent/10 px-3 py-1.5 rounded-full">
-                                        <Clock className="w-4 h-4 text-accent" />
-                                        <span className="text-xs font-medium text-gray-700">
-                                            {service.duration}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
 
                             {/* Call to Action */}
                             <p className="text-xs text-gray-400 italic text-center">
@@ -162,26 +144,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 </div>
             </motion.div>
 
-            {/* Flip Indicator */}
-            <div className="absolute top-4 right-4 z-10 pointer-events-none">
-                <motion.div
-                    className="bg-white/95 backdrop-blur-sm rounded-full p-2.5 shadow-lg border border-primary/10"
-                    animate={{ rotate: isFlipped ? 180 : 0 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <svg
-                        className="w-5 h-5 text-primary"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                </motion.div>
-            </div>
+
         </div>
     );
 }
