@@ -12,74 +12,74 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export default function ServicesSection() {
-    return (
-        <section
-            id="servicios"
-            className="py-20 bg-white overflow-visible"
+  return (
+    <section
+      id="servicios"
+      className="pt-16 pb-0 bg-white overflow-visible"
+    >
+      <div className="container mx-auto px-4 pb-8">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-            <div className="container mx-auto px-4 pb-12">
-                <motion.div
-                    className="text-center mb-16"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <h2 className="font-playfair text-4xl md:text-5xl font-bold text-primary mb-4">
-                        Nuestros Servicios Exclusivos
-                    </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Descubre una experiencia de belleza única con nuestros servicios
-                        premium de diseño de uñas.
-                    </p>
-                </motion.div>
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold text-primary mb-4">
+            Nuestros Servicios Exclusivos
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Descubre una experiencia de belleza única con nuestros servicios
+            premium de diseño de uñas.
+          </p>
+        </motion.div>
 
-                <motion.div
-                    className="overflow-visible"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                    <Swiper
-                        modules={[Navigation, Pagination, Autoplay]}
-                        spaceBetween={30}
-                        slidesPerView={1}
-                        slidesPerGroup={1}
-                        navigation
-                        pagination={{ clickable: true }}
-                        loop={true}
-                        autoplay={{
-                            delay: 5000,
-                            disableOnInteraction: false,
-                        }}
-                        breakpoints={{
-                            640: {
-                                slidesPerView: 2,
-                                slidesPerGroup: 1,
-                                spaceBetween: 20,
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                                slidesPerGroup: 1,
-                                spaceBetween: 30,
-                            },
-                        }}
-                        watchOverflow={true}
-                        className="pb-16 services-swiper"
-                    >
-                        {services
-                            .filter(service => service.id !== 'retiro-material')
-                            .map((service) => (
-                                <SwiperSlide key={service.id} className="!h-auto py-4">
-                                    <ServiceCard service={service} />
-                                </SwiperSlide>
-                            ))}
-                    </Swiper>
-                </motion.div>
+        <motion.div
+          className="overflow-visible"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            slidesPerGroup={1}
+            navigation
+            pagination={{ clickable: true }}
+            loop={true}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                slidesPerGroup: 1,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 3,
+                slidesPerGroup: 1,
+                spaceBetween: 30,
+              },
+            }}
+            watchOverflow={true}
+            className="pb-16 services-swiper"
+          >
+            {services
+              .filter(service => service.id !== 'retiro-material')
+              .map((service) => (
+                <SwiperSlide key={service.id} className="!h-auto py-4">
+                  <ServiceCard service={service} />
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </motion.div>
 
-                {/* Custom Swiper Styles */}
-                <style jsx global>{`
+        {/* Custom Swiper Styles */}
+        <style jsx global>{`
           .swiper-button-next,
           .swiper-button-prev {
             color: #991142 !important;
@@ -141,7 +141,7 @@ export default function ServicesSection() {
             border-radius: 4px;
           }
         `}</style>
-            </div>
-        </section>
-    );
+      </div>
+    </section>
+  );
 }

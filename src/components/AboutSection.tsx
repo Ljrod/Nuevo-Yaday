@@ -27,7 +27,7 @@ export default function AboutSection() {
     ];
 
     return (
-        <section id="nosotros" className="py-20 bg-gradient-to-br from-background to-white">
+        <section id="nosotros" className="pt-4 pb-20 bg-gradient-to-br from-background to-white">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Image Column */}

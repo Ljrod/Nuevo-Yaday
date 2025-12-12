@@ -89,10 +89,20 @@ export default function BookingForm() {
             // Validar formato de email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formData.email)) {
-                newErrors.email = "Por favor ingresa un email válido";
+                newErrors.email = "Esto no es una dirección de correo electrónico válida";
             }
         }
-        if (!formData.phone.trim()) newErrors.phone = "Por favor ingresa tu teléfono";
+        if (!formData.phone.trim()) {
+            newErrors.phone = "Por favor ingresa tu teléfono";
+        } else {
+            // Validar que solo contenga números (después de limpiar espacios y caracteres especiales)
+            const phoneNumbers = formData.phone.replace(/[\s\-\(\)\+]/g, '');
+            if (!/^\d+$/.test(phoneNumbers)) {
+                newErrors.phone = "El teléfono debe contener solo números";
+            } else if (phoneNumbers.length < 9) {
+                newErrors.phone = "El teléfono debe tener al menos 9 dígitos";
+            }
+        }
 
         setErrors(newErrors);
 
@@ -159,6 +169,7 @@ export default function BookingForm() {
     return (
         <motion.form
             onSubmit={handleSubmit}
+            noValidate
             className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -271,11 +282,10 @@ export default function BookingForm() {
                     </h3>
 
                     <div className="space-y-4">
-                        {/* Name */}
                         <div className="space-y-2">
                             <Label htmlFor="name" className="flex items-center gap-2">
                                 <User className="w-4 h-4" />
-                                Nombre Completo
+                                Nombre Completo *
                             </Label>
                             <Input
                                 id="name"
@@ -286,19 +296,19 @@ export default function BookingForm() {
                                     setFormData({ ...formData, name: e.target.value })
                                 }
                                 className={cn(errors.name && "border-red-500")}
+                                required
                             />
                             {errors.name && (
                                 <p className="text-sm text-red-500">{errors.name}</p>
                             )}
                         </div>
 
-                        {/* Email */}
                         <div className="space-y-2">
                             <Label htmlFor="email" className="flex items-center gap-2">
                                 <Mail className="w-4 h-4" />
-                                Email
+                                Email *
                             </Label>
-                            <Input
+                            <input
                                 id="email"
                                 type="email"
                                 placeholder="tu@email.com"
@@ -306,28 +316,43 @@ export default function BookingForm() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, email: e.target.value })
                                 }
-                                className={cn(errors.email && "border-red-500")}
+                                onInvalid={(e) => {
+                                    e.preventDefault();
+                                    (e.target as HTMLInputElement).setCustomValidity(
+                                        'Esto no es una dirección de correo electrónico válida'
+                                    );
+                                }}
+                                onInput={(e) => {
+                                    (e.target as HTMLInputElement).setCustomValidity('');
+                                }}
+                                className={cn(
+                                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                                    errors.email && "border-red-500"
+                                )}
+                                required
                             />
                             {errors.email && (
                                 <p className="text-sm text-red-500">{errors.email}</p>
                             )}
                         </div>
 
-                        {/* Phone */}
                         <div className="space-y-2">
                             <Label htmlFor="phone" className="flex items-center gap-2">
                                 <Phone className="w-4 h-4" />
-                                Teléfono / WhatsApp
+                                Teléfono / WhatsApp *
                             </Label>
                             <Input
                                 id="phone"
                                 type="tel"
                                 placeholder="+34 722 22 43 79"
                                 value={formData.phone}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, phone: e.target.value })
-                                }
+                                onChange={(e) => {
+                                    // Permitir solo números, espacios, +, -, (, )
+                                    const value = e.target.value.replace(/[^\d\s\+\-\(\)]/g, '');
+                                    setFormData({ ...formData, phone: value });
+                                }}
                                 className={cn(errors.phone && "border-red-500")}
+                                required
                             />
                             {errors.phone && (
                                 <p className="text-sm text-red-500">{errors.phone}</p>
