@@ -12,10 +12,24 @@ interface ServiceCardProps {
 export default function ServiceCard({ service }: ServiceCardProps) {
     const [isFlipped, setIsFlipped] = useState(false);
 
+    const handleMouseEnter = () => {
+        setIsFlipped(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsFlipped(false);
+    };
+
+    const handleTouchStart = () => {
+        setIsFlipped(!isFlipped);
+    };
+
     return (
         <div
             className="relative w-full h-[480px] cursor-pointer group"
-            onClick={() => setIsFlipped(!isFlipped)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
         >
             <motion.div
                 className="relative w-full h-full"
@@ -67,7 +81,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
                             {/* Call to Action */}
                             <p className="text-xs text-gray-400 italic text-center">
-                                Toca para ver ejemplos
+                                Pasa el mouse para ver ejemplos
                             </p>
                         </div>
 
@@ -89,17 +103,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 >
                     <div className="w-full h-full bg-gradient-to-br from-white to-primary/5 p-6 flex flex-col">
                         {/* Header */}
-                        <div className="mb-4">
-                            <h3 className="font-playfair text-xl font-bold text-primary mb-2">
+                        <div className="mb-6">
+                            <h3 className="font-playfair text-2xl font-bold text-primary text-center">
                                 {service.name}
                             </h3>
-                            <p className="text-sm text-gray-600">
-                                Galería de ejemplos
-                            </p>
                         </div>
 
                         {/* Gallery Grid */}
-                        <div className="grid grid-cols-2 gap-3 flex-grow mb-4">
+                        <div className="grid grid-cols-2 gap-4 flex-grow">
                             {[service.mainImageUrl, ...service.sampleImageUrls.slice(0, 3)].map((url, index) => (
                                 <motion.div
                                     key={index}
@@ -119,26 +130,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                             ))}
                         </div>
 
-                        {/* Features */}
-                        <div className="space-y-2">
-                            <p className="text-xs font-semibold text-primary uppercase tracking-wide">
-                                Características
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {service.features.slice(0, 3).map((feature, index) => (
-                                    <span
-                                        key={index}
-                                        className="text-xs bg-white px-3 py-1 rounded-full text-gray-700 shadow-sm border border-primary/10"
-                                    >
-                                        {feature}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
+
 
                         {/* Back Indicator */}
-                        <p className="text-xs text-gray-400 italic text-center mt-4">
-                            Toca para volver
+                        <p className="text-xs text-gray-400 italic text-center mt-6">
+                            Quita el mouse para volver
                         </p>
                     </div>
                 </div>

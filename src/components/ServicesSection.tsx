@@ -15,9 +15,9 @@ export default function ServicesSection() {
     return (
         <section
             id="servicios"
-            className="py-20 bg-white overflow-hidden"
+            className="py-20 bg-white overflow-visible"
         >
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 pb-12">
                 <motion.div
                     className="text-center mb-16"
                     initial={{ opacity: 0, y: 30 }}
@@ -35,6 +35,7 @@ export default function ServicesSection() {
                 </motion.div>
 
                 <motion.div
+                    className="overflow-visible"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -44,6 +45,7 @@ export default function ServicesSection() {
                         modules={[Navigation, Pagination, Autoplay]}
                         spaceBetween={30}
                         slidesPerView={1}
+                        slidesPerGroup={1}
                         navigation
                         pagination={{ clickable: true }}
                         loop={true}
@@ -54,19 +56,22 @@ export default function ServicesSection() {
                         breakpoints={{
                             640: {
                                 slidesPerView: 2,
+                                slidesPerGroup: 1,
                                 spaceBetween: 20,
                             },
                             1024: {
                                 slidesPerView: 3,
+                                slidesPerGroup: 1,
                                 spaceBetween: 30,
                             },
                         }}
-                        className="pb-12"
+                        watchOverflow={true}
+                        className="pb-16 services-swiper"
                     >
                         {services
                             .filter(service => service.id !== 'retiro-material')
                             .map((service) => (
-                                <SwiperSlide key={service.id}>
+                                <SwiperSlide key={service.id} className="!h-auto py-4">
                                     <ServiceCard service={service} />
                                 </SwiperSlide>
                             ))}
@@ -102,8 +107,23 @@ export default function ServicesSection() {
             font-weight: 800;
           }
 
+          .services-swiper {
+            overflow: hidden !important;
+            padding-bottom: 20px;
+          }
+
+          .services-swiper .swiper-slide {
+            overflow: visible;
+          }
+
+          .swiper-wrapper {
+            padding-bottom: 20px;
+          }
+
           .swiper-pagination {
-            bottom: -40px !important;
+            bottom: 0px !important;
+            position: relative !important;
+            margin-top: 20px !important;
           }
 
           .swiper-pagination-bullet {
