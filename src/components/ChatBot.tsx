@@ -315,7 +315,10 @@ export default function ChatBot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 100, scale: 0.8 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[600px] max-h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+                        className="fixed z-50 bg-white shadow-2xl flex flex-col overflow-hidden
+                            bottom-0 right-0 left-0 top-0 rounded-none
+                            sm:bottom-24 sm:right-6 sm:left-auto sm:top-auto sm:rounded-2xl
+                            sm:w-[380px] sm:max-w-[calc(100vw-3rem)] sm:h-[600px] sm:max-h-[calc(100vh-8rem)]"
                     >
                         {/* Header */}
                         <div className="bg-[#075E54] text-white p-4 flex items-center justify-between">
@@ -328,6 +331,12 @@ export default function ChatBot() {
                                     <p className="text-xs text-white/80">Siempre disponible</p>
                                 </div>
                             </div>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
 
                         {/* Messages */}
@@ -389,8 +398,8 @@ export default function ChatBot() {
                                         ))}
                                     </div>
                                     <div className="flex gap-2 pt-2 border-t border-gray-100">
-                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
-                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                        <button onClick={goBack} className="flex-1 text-gray-600 text-sm py-2 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-500 text-sm py-2 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">🔄 Reiniciar</button>
                                     </div>
                                 </div>
                             )}
@@ -404,8 +413,8 @@ export default function ChatBot() {
                                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                                     />
                                     <div className="flex gap-2 pt-2 border-t border-gray-100">
-                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
-                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                        <button onClick={goBack} className="flex-1 text-gray-600 text-sm py-2 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-500 text-sm py-2 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">🔄 Reiniciar</button>
                                     </div>
                                 </div>
                             )}
@@ -424,8 +433,8 @@ export default function ChatBot() {
                                         ))}
                                     </div>
                                     <div className="flex gap-2 pt-2 border-t border-gray-100">
-                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
-                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                        <button onClick={goBack} className="flex-1 text-gray-600 text-sm py-2 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-500 text-sm py-2 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">🔄 Reiniciar</button>
                                     </div>
                                 </div>
                             )}
@@ -463,8 +472,8 @@ export default function ChatBot() {
                                         </button>
                                     </div>
                                     <div className="flex gap-2 pt-2 border-t border-gray-100">
-                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
-                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                        <button onClick={goBack} className="flex-1 text-gray-600 text-sm py-2 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-500 text-sm py-2 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">🔄 Reiniciar</button>
                                     </div>
                                 </div>
                             )}
