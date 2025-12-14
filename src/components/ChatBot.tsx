@@ -157,7 +157,7 @@ export default function ChatBot() {
             setBookingData({ ...bookingData, mensaje });
             setCurrentStep("confirm");
             setTimeout(() => {
-                confirmBooking(mensaje);
+                addBotMessage("📝 Este es el resumen de tu cita. Revisa que todo esté correcto:");
             }, 500);
         }
 
@@ -226,6 +226,64 @@ export default function ChatBot() {
         setTimeout(() => {
             addBotMessage("¡Hola! 👋 ¿Te gustaría agendar una cita?");
         }, 300);
+    };
+
+    // Mapa de pasos anteriores
+    const previousStepMap: Record<Step, Step | null> = {
+        welcome: null,
+        service: "welcome",
+        date: "service",
+        time: "date",
+        name: "time",
+        email: "name",
+        phone: "email",
+        message: "phone",
+        confirm: "message",
+        completed: null,
+    };
+
+    // Mensajes para cada paso al volver
+    const stepMessages: Record<Step, string> = {
+        welcome: "¡Hola! 👋 ¿Te gustaría agendar una cita?",
+        service: "¿Qué servicio te interesa?",
+        date: "¿Para qué fecha te gustaría agendar tu cita?",
+        time: "¿A qué hora prefieres tu cita?",
+        name: "¿Cuál es tu nombre completo?",
+        email: "¿Cuál es tu email?",
+        phone: "¿Cuál es tu número de teléfono o WhatsApp?",
+        message: "¿Tienes algún comentario adicional? (Opcional - escribe 'no' si no)",
+        confirm: "",
+        completed: "",
+    };
+
+    const goBack = () => {
+        const prevStep = previousStepMap[currentStep];
+        if (prevStep) {
+            // Limpiar el dato del paso actual
+            if (currentStep === "service") {
+                setBookingData(prev => ({ ...prev, service: "" }));
+            } else if (currentStep === "date") {
+                setBookingData(prev => ({ ...prev, date: null }));
+            } else if (currentStep === "time") {
+                setBookingData(prev => ({ ...prev, time: "" }));
+            } else if (currentStep === "name") {
+                setBookingData(prev => ({ ...prev, name: "" }));
+            } else if (currentStep === "email") {
+                setBookingData(prev => ({ ...prev, email: "" }));
+            } else if (currentStep === "phone") {
+                setBookingData(prev => ({ ...prev, phone: "" }));
+            } else if (currentStep === "message") {
+                setBookingData(prev => ({ ...prev, mensaje: "" }));
+            }
+
+            setCurrentStep(prevStep);
+            addBotMessage(`⬅️ Volviendo... ${stepMessages[prevStep]}`);
+        }
+    };
+
+    const goToStep = (step: Step) => {
+        setCurrentStep(step);
+        addBotMessage(`✏️ Editando... ${stepMessages[step]}`);
     };
 
     return (
@@ -318,72 +376,142 @@ export default function ChatBot() {
                             )}
 
                             {currentStep === "service" && (
-                                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
-                                    {services.filter(s => s.id !== 'retiro-material').map((service) => (
-                                        <button
-                                            key={service.id}
-                                            onClick={() => handleServiceSelect(service.name)}
-                                            className="bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#075E54] py-2 px-3 rounded-lg transition-colors text-xs font-medium text-left"
-                                        >
-                                            {service.name}
-                                        </button>
-                                    ))}
+                                <div className="space-y-2">
+                                    <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                                        {services.filter(s => s.id !== 'retiro-material').map((service) => (
+                                            <button
+                                                key={service.id}
+                                                onClick={() => handleServiceSelect(service.name)}
+                                                className="bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#075E54] py-2 px-3 rounded-lg transition-colors text-xs font-medium text-left"
+                                            >
+                                                {service.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                    </div>
                                 </div>
                             )}
 
                             {currentStep === "date" && (
-                                <input
-                                    type="date"
-                                    min={format(new Date(), "yyyy-MM-dd")}
-                                    onChange={(e) => handleDateSelect(new Date(e.target.value))}
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                                />
+                                <div className="space-y-2">
+                                    <input
+                                        type="date"
+                                        min={format(new Date(), "yyyy-MM-dd")}
+                                        onChange={(e) => handleDateSelect(new Date(e.target.value))}
+                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                    />
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                    </div>
+                                </div>
                             )}
 
                             {currentStep === "time" && (
-                                <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
-                                    {availableHours.map((time) => (
-                                        <button
-                                            key={time}
-                                            onClick={() => handleTimeSelect(time)}
-                                            className="bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#075E54] py-2 px-3 rounded-lg transition-colors text-sm font-medium"
-                                        >
-                                            {time}
-                                        </button>
-                                    ))}
+                                <div className="space-y-2">
+                                    <div className="grid grid-cols-3 gap-2 max-h-36 overflow-y-auto">
+                                        {availableHours.map((time) => (
+                                            <button
+                                                key={time}
+                                                onClick={() => handleTimeSelect(time)}
+                                                className="bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#075E54] py-2 px-3 rounded-lg transition-colors text-sm font-medium"
+                                            >
+                                                {time}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                    </div>
                                 </div>
                             )}
 
                             {(currentStep === "name" || currentStep === "email" || currentStep === "phone" || currentStep === "message") && (
-                                <div className="flex gap-2">
-                                    <input
-                                        type={currentStep === "email" ? "email" : currentStep === "phone" ? "tel" : "text"}
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        onKeyPress={(e) => {
-                                            if (e.key === "Enter" && inputValue.trim()) {
-                                                handleTextInput(currentStep, inputValue.trim());
+                                <div className="space-y-2">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type={currentStep === "email" ? "email" : currentStep === "phone" ? "tel" : "text"}
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                            onKeyPress={(e) => {
+                                                if (e.key === "Enter" && inputValue.trim()) {
+                                                    handleTextInput(currentStep, inputValue.trim());
+                                                }
+                                            }}
+                                            placeholder={
+                                                currentStep === "name" ? "Tu nombre..." :
+                                                    currentStep === "email" ? "tu@email.com" :
+                                                        currentStep === "phone" ? "+34 722224379" :
+                                                            "Escribe aquí..."
                                             }
-                                        }}
-                                        placeholder={
-                                            currentStep === "name" ? "Tu nombre..." :
-                                                currentStep === "email" ? "tu@email.com" :
-                                                    currentStep === "phone" ? "+34 722224379" :
-                                                        "Escribe aquí..."
-                                        }
-                                        className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                                        autoFocus
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            if (inputValue.trim()) {
-                                                handleTextInput(currentStep, inputValue.trim());
-                                            }
-                                        }}
-                                        className="bg-[#25D366] text-white p-2 rounded-lg hover:bg-[#20BA5A] transition-colors"
-                                    >
-                                        <Send className="w-5 h-5" />
-                                    </button>
+                                            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                            autoFocus
+                                        />
+                                        <button
+                                            onClick={() => {
+                                                if (inputValue.trim()) {
+                                                    handleTextInput(currentStep, inputValue.trim());
+                                                }
+                                            }}
+                                            className="bg-[#25D366] text-white p-2 rounded-lg hover:bg-[#20BA5A] transition-colors"
+                                        >
+                                            <Send className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                        <button onClick={goBack} className="flex-1 text-gray-500 text-xs py-1 hover:text-gray-700">⬅️ Volver</button>
+                                        <button onClick={handleReset} className="flex-1 text-red-400 text-xs py-1 hover:text-red-600">🔄 Reiniciar</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {currentStep === "confirm" && (
+                                <div className="space-y-3">
+                                    <p className="text-xs text-gray-500 text-center">Toca un campo para editarlo:</p>
+                                    <div className="space-y-2 text-sm">
+                                        <button onClick={() => goToStep("service")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">🎨 Servicio:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.service}</span>
+                                        </button>
+                                        <button onClick={() => goToStep("date")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">📅 Fecha:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.date ? format(bookingData.date, "PPP", { locale: es }) : ""}</span>
+                                        </button>
+                                        <button onClick={() => goToStep("time")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">🕐 Hora:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.time}</span>
+                                        </button>
+                                        <button onClick={() => goToStep("name")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">👤 Nombre:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.name}</span>
+                                        </button>
+                                        <button onClick={() => goToStep("email")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">📧 Email:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.email}</span>
+                                        </button>
+                                        <button onClick={() => goToStep("phone")} className="w-full flex justify-between items-center bg-gray-50 p-2 rounded-lg hover:bg-gray-100">
+                                            <span className="text-gray-500">📱 Teléfono:</span>
+                                            <span className="font-medium text-[#075E54]">{bookingData.phone}</span>
+                                        </button>
+                                    </div>
+                                    <div className="flex gap-2 pt-2">
+                                        <button
+                                            onClick={handleReset}
+                                            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+                                        >
+                                            ❌ Cancelar
+                                        </button>
+                                        <button
+                                            onClick={() => confirmBooking(bookingData.mensaje)}
+                                            className="flex-1 bg-[#25D366] text-white py-2 px-4 rounded-lg hover:bg-[#20BA5A] transition-colors text-sm font-medium"
+                                        >
+                                            ✅ Confirmar
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 
