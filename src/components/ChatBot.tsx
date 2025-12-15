@@ -409,7 +409,12 @@ export default function ChatBot() {
                                     <input
                                         type="date"
                                         min={format(new Date(), "yyyy-MM-dd")}
-                                        onChange={(e) => handleDateSelect(new Date(e.target.value))}
+                                        onChange={(e) => {
+                                            // Evitar problema de zona horaria: parsear manualmente la fecha
+                                            const [year, month, day] = e.target.value.split('-').map(Number);
+                                            const localDate = new Date(year, month - 1, day);
+                                            handleDateSelect(localDate);
+                                        }}
                                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                                     />
                                     <div className="flex gap-2 pt-2 border-t border-gray-100">
