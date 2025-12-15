@@ -1,6 +1,8 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import { sendBookingNotification } from '@/lib/twilio';
+import { sendBookingEmail } from '@/lib/email';
+import { createCalendarEvent, isGoogleCalendarConfigured } from '@/lib/google-calendar';
 
 export async function POST(request: Request) {
     try {
@@ -33,19 +35,34 @@ export async function POST(request: Request) {
 
         const booking = result.rows[0];
 
-        // Enviar notificación de WhatsApp (sin bloquear la respuesta)
-        // Si falla el WhatsApp, la reserva ya está guardada
-        sendBookingNotification({
+        const bookingData = {
             nombre,
             email,
             telefono: telefono || 'No proporcionado',
             servicio,
             fecha,
             hora,
-            mensaje,
-        }).catch((error) => {
-            console.error('Error sending WhatsApp notification:', error);
+            mensaje: mensaje || '',
+        };
+
+        // Enviar notificación de WhatsApp (sin bloquear la respuesta)
+        sendBookingNotification(bookingData).catch((error) => {
+            console.error('❌ Error sending WhatsApp notification:', error);
         });
+
+        // Enviar emails de notificación (sin bloquear la respuesta)
+        sendBookingEmail(bookingData).catch((error) => {
+            console.error('❌ Error sending email notification:', error);
+        });
+
+        // Crear evento en Google Calendar (sin bloquear la respuesta)
+        if (isGoogleCalendarConfigured()) {
+            createCalendarEvent(bookingData).catch((error) => {
+                console.error('❌ Error creating Google Calendar event:', error);
+            });
+        } else {
+            console.warn('⚠️ Google Calendar no está configurado. Saltando creación de evento.');
+        }
 
         return NextResponse.json(
             {
