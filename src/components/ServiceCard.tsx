@@ -74,7 +74,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                             </h3>
 
                             {/* Description */}
-                            <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
+                            <p className="text-sm text-gray-600 mb-4 flex-grow">
                                 {service.description}
                             </p>
 

@@ -44,7 +44,7 @@ export default function BookingSection() {
                         <p className="text-sm text-gray-600">
                             Lunes a Sábado
                             <br />
-                            9:00 AM - 7:00 PM
+                            9:00 AM - 11:00 PM
                         </p>
                     </div>
 
